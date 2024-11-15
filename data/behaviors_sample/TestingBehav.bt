@@ -1,0 +1,128 @@
+{
+  "name": "DebugDrawing",
+  "id": "a4e89c97-d12b-4d90-ae2b-4ecab450b6bb",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "RenewPosition",
+      "id": "1eaa26a7-b19c-4b26-9dab-58218e0b2991",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Renew Target Position",
+          "id": "3d424f9c-7acc-4e2f-b92c-c260d4953e12",
+          "type": "scriptAction",
+          "decorators": [
+            {
+              "id": "66141113-2aaa-4f2e-bc55-24d5fbfb9866",
+              "type": "scriptCondition",
+              "name": "IfCamelMoved",
+              "script": [
+                "local distance = bb.MyTarget:GetPosition():Distance(loc.TargetPos)",
+                "return distance > 1"
+              ]
+            }
+          ],
+          "script": [
+            "loc.TargetPos = bb.MyTarget:GetPosition()"
+          ]
+        },
+        {
+          "name": "ReachAndWait",
+          "id": "babe887e-3ac3-4133-b60a-914e0a64d854",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "GetToTargetPos",
+              "id": "4af8c6fe-a141-4014-bd52-eb2376d5f264",
+              "type": "move",
+              "position": [
+                "return loc.TargetPos"
+              ]
+            },
+            {
+              "name": "Wait Forever",
+              "id": "14d71713-3c75-43cc-8506-bd16b9e3befd",
+              "type": "waitForever"
+            }
+          ]
+        }
+      ],
+      "active": true
+    },
+    {
+      "name": "DrawLine",
+      "id": "b2435f56-878e-4ba5-9c18-795e0495053e",
+      "type": "scriptAction",
+      "script": [
+        "DebugLine( self:GetPosition(), bb.MyTarget:GetPosition() + Vec3(0,0,1), 1, 0, 0 )"
+      ]
+    }
+  ],
+  "decorators": [
+    {
+      "id": "9d795d4d-ba6c-4c8c-8813-87c346b0c034",
+      "type": "loopForever",
+      "name": "LoopForever"
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Renew Target Position",
+      "id": "653778c2-aeb4-43af-9452-804143e08b9e",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "653778c2-aeb4-43af-9452-804143e08b9e",
+            "position": "1687.5,691"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "loc.TargetPos = bb.MyTarget:GetPosition()"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "a4e89c97-d12b-4d90-ae2b-4ecab450b6bb",
+        "position": "1950,128.5",
+        "height": 110.0
+      },
+      {
+        "id": "1eaa26a7-b19c-4b26-9dab-58218e0b2991",
+        "position": "1725,316"
+      },
+      {
+        "id": "3d424f9c-7acc-4e2f-b92c-c260d4953e12",
+        "position": "1550,516"
+      },
+      {
+        "id": "babe887e-3ac3-4133-b60a-914e0a64d854",
+        "position": "1900,541"
+      },
+      {
+        "id": "4af8c6fe-a141-4014-bd52-eb2376d5f264",
+        "position": "1875,728.5"
+      },
+      {
+        "id": "14d71713-3c75-43cc-8506-bd16b9e3befd",
+        "position": "2125,716"
+      },
+      {
+        "id": "b2435f56-878e-4ba5-9c18-795e0495053e",
+        "position": "2300,503.5"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2753.5",
+    "gridPadding": "0,3.5"
+  },
+  "parameters": [],
+  "locals": {
+    "TargetPos": "Vec3(0,0,0)"
+  }
+}
