@@ -1,0 +1,13 @@
+{
+  "name": "behaviors_vladimir_horky",
+  "trees": [
+    "Theseus\\Follow.bt",
+    "Theseus\\Listen.bt"
+  ],
+  "initScripts": [
+    "Theseus\\Theseus.class.lua",
+    "classes.lua"
+  ],
+  "parameters": {},
+  "capabilities": {}
+}

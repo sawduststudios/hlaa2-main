@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>59B20EC6-A96B-407D-83AE-55A6E8D2C851</ProjectGuid>
+    <ProjectGuid>{250673c8-1573-463e-84fe-8a1892307d2a}</ProjectGuid>
     <Name>RepetitionOne</Name>
     <RootNamespace>RepetitionOne</RootNamespace>
   </PropertyGroup>
