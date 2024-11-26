@@ -9,6 +9,30 @@
       "type": "waitForever"
     },
     {
+      "name": "look around",
+      "id": "751e4858-bcc3-46ed-b4b6-b6fdc4be5bb7",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "look for targets",
+          "id": "38dc0547-d686-4640-bbeb-d8ef2ff9a288",
+          "type": "scriptAction",
+          "script": [
+            "-- infantryman soldier override reaction",
+            "loc.visibleEnemies = self:GetVisibleEnemies(70)"
+          ]
+        },
+        {
+          "name": "0.5",
+          "id": "27f3ceb4-5afd-4ff6-8ad3-d6b257e9d055",
+          "type": "wait",
+          "time": [
+            "return 2"
+          ]
+        }
+      ]
+    },
+    {
       "name": "recieve and follow",
       "id": "3eddf0bf-2e89-4146-b023-ea23ebc9a2c5",
       "type": "supervisedParallel",
@@ -27,144 +51,232 @@
           ]
         },
         {
-          "name": "Find Path",
-          "id": "09d45a14-7eb7-4fe7-963f-6093b2e8fbeb",
-          "type": "supervisedParallel",
+          "name": "Fight or Move",
+          "id": "3dba2b39-bf43-4c01-bcf2-376750f6a5c8",
+          "type": "selector",
           "subtrees": [
             {
-              "name": "Move or Wait",
-              "id": "affc040c-3850-4db4-b56b-6eead682bf2b",
-              "type": "selector",
-              "subtrees": [
-                {
-                  "name": "Remember move call and move",
-                  "id": "42606444-3fea-45fe-b3be-39f468ddf7db",
-                  "type": "sequence",
-                  "subtrees": [
-                    {
-                      "name": "Remember move",
-                      "id": "4a286b25-7d82-4e15-be63-c7199a5d8e51",
-                      "type": "scriptAction",
-                      "script": [
-                        "loc.moveCalled = true"
-                      ]
-                    },
-                    {
-                      "name": "RenewPosition",
-                      "id": "f573a4e5-0bc0-4299-b8b7-81f05b04aa7e",
-                      "type": "selector",
-                      "subtrees": [
-                        {
-                          "name": "Renew Target Position",
-                          "id": "3943dc36-208f-42fa-a804-6e3a778e736e",
-                          "type": "scriptAction",
-                          "decorators": [
-                            {
-                              "id": "2c16b631-c958-43a1-b92d-21c7f90b9106",
-                              "type": "scriptCondition",
-                              "name": "ifMinotaurMoved",
-                              "script": [
-                                "if loc.lastKnownMinotaurPosition == nil or loc.TargetPos == nil then",
-                                "    return false",
-                                "end",
-                                "",
-                                "local distance = loc.lastKnownMinotaurPosition:Distance(loc.TargetPos)",
-                                "return distance > 1"
-                              ]
-                            }
-                          ],
-                          "script": [
-                            "loc.TargetPos = loc.lastKnownMinotaurPosition"
-                          ]
-                        },
-                        {
-                          "name": "ReachAndWait",
-                          "id": "4eb994f5-c797-44ef-baa4-0da39fcb6850",
-                          "type": "sequence",
-                          "subtrees": [
-                            {
-                              "name": "GetToTargetPos",
-                              "id": "5f758f81-c428-4fa5-b3a4-c91d7caf0c49",
-                              "type": "move",
-                              "position": [
-                                "return loc.TargetPos"
-                              ]
-                            },
-                            {
-                              "name": "Wait Forever",
-                              "id": "547baa84-e177-473d-a5be-82374f09f0c7",
-                              "type": "waitForever"
-                            }
-                          ]
-                        }
-                      ],
-                      "active": true
-                    }
-                  ],
-                  "decorators": [
-                    {
-                      "id": "3e5052fe-8b95-4cc2-842a-418f50228971",
-                      "type": "scriptCondition",
-                      "name": "If known last pos",
-                      "script": [
-                        "return loc.lastKnownMinotaurPosition ~= nil"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "Wait Forever",
-                  "id": "ce1f955d-e2a3-4597-bacb-8ddfefac7c96",
-                  "type": "waitForever"
-                }
-              ],
-              "active": true
-            },
-            {
-              "name": "Wait to Find Path",
-              "id": "52b5706b-f0e1-43eb-819f-0004044e45eb",
+              "name": "fight",
+              "id": "db9d3b81-55e0-422b-8dc3-099b18d61121",
               "type": "sequence",
               "subtrees": [
                 {
-                  "name": "Ask for Path",
-                  "id": "889dcbfa-00d8-484e-a7c7-247b67fa2a04",
-                  "type": "scriptAction",
-                  "decorators": [
-                    {
-                      "id": "9ba00243-fcdc-48b6-961d-adc2a450b66b",
-                      "type": "waitUntil",
-                      "name": "Wait Until Move Called",
-                      "condition": [
-                        "return loc.moveCalled"
-                      ]
-                    }
-                  ],
-                  "script": [
-                    "loc.pathQuery = FindPath(self:GetPosition(), loc.lastKnownMinotaurPosition)"
+                  "name": "Stop",
+                  "id": "cedbeff4-912c-4482-b1f6-6b84ce68a060",
+                  "type": "setEntitySpeedLimits",
+                  "movementSpeed": [
+                    "return 0"
                   ]
                 },
                 {
-                  "name": "Save Found Path",
-                  "id": "f6a67d41-b36f-4911-b140-fb3efd6b0c46",
+                  "name": "select target",
+                  "id": "5fd5563e-78e2-42b1-b88c-b61feefba680",
                   "type": "scriptAction",
-                  "decorators": [
-                    {
-                      "id": "13722a96-2fd4-41d3-857e-d341430d43fa",
-                      "type": "waitUntil",
-                      "name": "Wait Until Path Ready",
-                      "condition": [
-                        "return loc.pathQuery:IsReady()"
-                      ]
-                    }
-                  ],
                   "script": [
-                    "loc.path = loc.pathQuery:Value()",
-                    "loc.pathQuery = nil"
+                    "loc.shootingTarget = loc.visibleEnemies[math.random(#loc.visibleEnemies)]"
+                  ]
+                },
+                {
+                  "name": "Aim",
+                  "id": "f915b786-9a6f-4d9f-9684-1e9fc8b47fbd",
+                  "type": "scriptAction",
+                  "script": [
+                    "self:ReqHeadingAimAtEntity(loc.shootingTarget)"
+                  ]
+                },
+                {
+                  "name": "Crouch",
+                  "id": "8d2955b2-f48f-4a95-8cc6-be2ca9a159a2",
+                  "type": "setStance",
+                  "stance": [
+                    "return Stance.Crouched"
+                  ]
+                },
+                {
+                  "name": "Fire",
+                  "id": "e138e30e-b4f1-4e32-b8b9-253b36f09070",
+                  "type": "fire",
+                  "rounds": [
+                    "return 10"
+                  ],
+                  "forced": false
+                },
+                {
+                  "name": "Reload",
+                  "id": "51054a8a-f4ad-4313-870e-b1ea79622b12",
+                  "type": "reloadWeapon"
+                },
+                {
+                  "name": "Move",
+                  "id": "6a747149-8d3b-4797-9ebc-fd556ac2a54b",
+                  "type": "resetSpeedLimits"
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "26efed60-4a82-41aa-a46c-5b61332142ff",
+                  "type": "scriptCondition",
+                  "name": "reaction",
+                  "script": [
+                    "if loc.visibleEnemies and #loc.visibleEnemies > 0 then",
+                    "    return true",
+                    "else",
+                    "    loc.shootingTarget = nil",
+                    "    return false",
+                    "end"
                   ]
                 }
               ]
+            },
+            {
+              "name": "Find Path",
+              "id": "09d45a14-7eb7-4fe7-963f-6093b2e8fbeb",
+              "type": "supervisedParallel",
+              "subtrees": [
+                {
+                  "name": "Move or Wait",
+                  "id": "affc040c-3850-4db4-b56b-6eead682bf2b",
+                  "type": "selector",
+                  "subtrees": [
+                    {
+                      "name": "Remember move call and move",
+                      "id": "42606444-3fea-45fe-b3be-39f468ddf7db",
+                      "type": "sequence",
+                      "subtrees": [
+                        {
+                          "name": "Remember move",
+                          "id": "4a286b25-7d82-4e15-be63-c7199a5d8e51",
+                          "type": "scriptAction",
+                          "script": [
+                            "loc.moveCalled = true"
+                          ]
+                        },
+                        {
+                          "name": "RenewPosition",
+                          "id": "f573a4e5-0bc0-4299-b8b7-81f05b04aa7e",
+                          "type": "selector",
+                          "subtrees": [
+                            {
+                              "name": "Renew Target Position",
+                              "id": "3943dc36-208f-42fa-a804-6e3a778e736e",
+                              "type": "scriptAction",
+                              "decorators": [
+                                {
+                                  "id": "2c16b631-c958-43a1-b92d-21c7f90b9106",
+                                  "type": "scriptCondition",
+                                  "name": "ifMinotaurMoved",
+                                  "script": [
+                                    "if loc.lastKnownMinotaurPosition == nil or loc.TargetPos == nil then",
+                                    "    return false",
+                                    "end",
+                                    "",
+                                    "local distance = loc.lastKnownMinotaurPosition:Distance(loc.TargetPos)",
+                                    "return distance > 1"
+                                  ]
+                                }
+                              ],
+                              "script": [
+                                "loc.TargetPos = loc.lastKnownMinotaurPosition"
+                              ]
+                            },
+                            {
+                              "name": "ReachAndWait",
+                              "id": "4eb994f5-c797-44ef-baa4-0da39fcb6850",
+                              "type": "sequence",
+                              "subtrees": [
+                                {
+                                  "name": "GetToTargetPos",
+                                  "id": "5f758f81-c428-4fa5-b3a4-c91d7caf0c49",
+                                  "type": "move",
+                                  "position": [
+                                    "return loc.TargetPos"
+                                  ]
+                                },
+                                {
+                                  "name": "Wait Forever",
+                                  "id": "547baa84-e177-473d-a5be-82374f09f0c7",
+                                  "type": "waitForever"
+                                }
+                              ]
+                            }
+                          ],
+                          "active": true
+                        }
+                      ],
+                      "decorators": [
+                        {
+                          "id": "3e5052fe-8b95-4cc2-842a-418f50228971",
+                          "type": "scriptCondition",
+                          "name": "If known last pos",
+                          "script": [
+                            "return loc.lastKnownMinotaurPosition ~= nil"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Wait Forever",
+                      "id": "ce1f955d-e2a3-4597-bacb-8ddfefac7c96",
+                      "type": "waitForever"
+                    }
+                  ],
+                  "active": true
+                },
+                {
+                  "name": "Wait to Find Path",
+                  "id": "52b5706b-f0e1-43eb-819f-0004044e45eb",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "Ask for Path",
+                      "id": "889dcbfa-00d8-484e-a7c7-247b67fa2a04",
+                      "type": "scriptAction",
+                      "decorators": [
+                        {
+                          "id": "9ba00243-fcdc-48b6-961d-adc2a450b66b",
+                          "type": "waitUntil",
+                          "name": "Wait Until Move Called",
+                          "condition": [
+                            "return loc.moveCalled"
+                          ]
+                        }
+                      ],
+                      "script": [
+                        "loc.pathQuery = FindPath(self:GetPosition(), loc.lastKnownMinotaurPosition)"
+                      ]
+                    },
+                    {
+                      "name": "Save Found Path",
+                      "id": "f6a67d41-b36f-4911-b140-fb3efd6b0c46",
+                      "type": "scriptAction",
+                      "decorators": [
+                        {
+                          "id": "13722a96-2fd4-41d3-857e-d341430d43fa",
+                          "type": "waitUntil",
+                          "name": "Wait Until Path Ready",
+                          "condition": [
+                            "return loc.pathQuery:IsReady()"
+                          ]
+                        }
+                      ],
+                      "script": [
+                        "loc.path = loc.pathQuery:Value()",
+                        "loc.pathQuery = nil"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "437beaaf-238a-4a7f-8522-2a10dd656b46",
+                  "type": "loopForever",
+                  "name": "<unnamed>"
+                }
+              ]
             }
-          ]
+          ],
+          "active": true
         }
       ]
     },
@@ -251,7 +363,7 @@
                     "then",
                     "    local critPointsCount = #loc.criticalPoints",
                     "\tfor i = 1, critPointsCount do",
-                    "\t\tif math.abs(self:GetPosition():Distance(loc.criticalPoints[i])) < 4 then",
+                    "\t\tif math.abs(self:GetPosition():Distance(loc.criticalPoints[i])) < 8 then",
                     "            return true",
                     "        end",
                     "     end",
@@ -333,20 +445,6 @@
   ],
   "unlinked-trees": [
     {
-      "name": "Recieve msg and Draw",
-      "id": "d30340a5-6dd6-46c0-b379-009bff4adada",
-      "type": "sequence",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "d30340a5-6dd6-46c0-b379-009bff4adada",
-            "position": "1862.5,514.90101010101"
-          }
-        ],
-        "editorObjects": []
-      }
-    },
-    {
       "name": "Draw a line",
       "id": "a0ed62db-0871-4a4c-b6cb-792dd5970a76",
       "type": "parallel",
@@ -388,15 +486,15 @@
         "nodesInfo": [
           {
             "id": "a0ed62db-0871-4a4c-b6cb-792dd5970a76",
-            "position": "4412.5,514.90101010101"
+            "position": "4965.37698412698,657.688424242424"
           },
           {
             "id": "4b313f0c-1861-4a23-9449-75fc4122fd86",
-            "position": "4212.5,664.90101010101"
+            "position": "4765.37698412698,807.688424242424"
           },
           {
             "id": "57809d75-d3cd-4cb4-a8bd-c99179e9cbd8",
-            "position": "4637.5,664.90101010101"
+            "position": "5190.37698412698,807.688424242424"
           }
         ],
         "editorObjects": []
@@ -411,7 +509,7 @@
         "nodesInfo": [
           {
             "id": "f9ffbe48-fe39-4e18-bfb8-dae4b81a2066",
-            "position": "2362.5,902.40101010101"
+            "position": "3377.87698412698,1070.18842424242"
           }
         ],
         "editorObjects": []
@@ -428,121 +526,183 @@
         "    loc.pathPoints[#loc.pathPoints+1] = loc.path:GetSegmentEnd(segmentCount-1)",
         "end"
       ]
+    },
+    {
+      "name": "<unnamed>",
+      "id": "e7d4fc08-d4a8-4893-9a10-7d3ae49bf212",
+      "type": "sequence",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "e7d4fc08-d4a8-4893-9a10-7d3ae49bf212",
+            "position": "2415.37698412698,707.688424242424"
+          }
+        ],
+        "editorObjects": []
+      }
     }
   ],
   "meta": {
     "nodesInfo": [
       {
         "id": "d8307860-7131-4254-84c4-005d51286196",
-        "position": "1912.5,239.90101010101"
+        "position": "2465.37698412698,382.688424242424"
       },
       {
         "id": "cc1bf1eb-7647-4b03-acef-13e2b8dfa483",
-        "position": "4362.5,564.90101010101"
+        "position": "4915.37698412698,707.688424242424"
       },
       {
         "id": "891bbac1-bb19-4c24-95c8-7ab9db4e2743",
-        "position": "437.5,564.90101010101"
+        "position": "990.376984126985,707.688424242424"
+      },
+      {
+        "id": "751e4858-bcc3-46ed-b4b6-b6fdc4be5bb7",
+        "position": "1390.37698412698,707.688424242424"
+      },
+      {
+        "id": "38dc0547-d686-4640-bbeb-d8ef2ff9a288",
+        "position": "1315.37698412698,807.688424242424"
+      },
+      {
+        "id": "27f3ceb4-5afd-4ff6-8ad3-d6b257e9d055",
+        "position": "1477.87698412698,807.688424242424"
       },
       {
         "id": "3eddf0bf-2e89-4146-b023-ea23ebc9a2c5",
-        "position": "1650,502.40101010101"
+        "position": "2202.87698412698,645.188424242424"
       },
       {
         "id": "0e581c82-9323-4c63-ac13-d77041797033",
-        "position": "1425,677.40101010101"
+        "position": "1815.37698412698,770.188424242424"
+      },
+      {
+        "id": "3dba2b39-bf43-4c01-bcf2-376750f6a5c8",
+        "position": "2427.87698412698,895.188424242424"
+      },
+      {
+        "id": "db9d3b81-55e0-422b-8dc3-099b18d61121",
+        "position": "1702.87698412698,1057.68842424242"
+      },
+      {
+        "id": "cedbeff4-912c-4482-b1f6-6b84ce68a060",
+        "position": "1047.64285714286,1217.58943434343"
+      },
+      {
+        "id": "5fd5563e-78e2-42b1-b88c-b61feefba680",
+        "position": "1222.64285714286,1217.58943434343"
+      },
+      {
+        "id": "f915b786-9a6f-4d9f-9684-1e9fc8b47fbd",
+        "position": "1385.14285714286,1217.58943434343"
+      },
+      {
+        "id": "8d2955b2-f48f-4a95-8cc6-be2ca9a159a2",
+        "position": "1572.64285714286,1217.58943434343"
+      },
+      {
+        "id": "e138e30e-b4f1-4e32-b8b9-253b36f09070",
+        "position": "1772.64285714286,1217.58943434343"
+      },
+      {
+        "id": "51054a8a-f4ad-4313-870e-b1ea79622b12",
+        "position": "1960.14285714286,1217.58943434343"
+      },
+      {
+        "id": "6a747149-8d3b-4797-9ebc-fd556ac2a54b",
+        "position": "2147.64285714286,1217.58943434343"
       },
       {
         "id": "09d45a14-7eb7-4fe7-963f-6093b2e8fbeb",
-        "position": "1850,689.90101010101"
+        "position": "2865.37698412698,1095.18842424242"
       },
       {
         "id": "affc040c-3850-4db4-b56b-6eead682bf2b",
-        "position": "1412.5,914.90101010101"
+        "position": "2427.87698412698,1320.18842424242"
       },
       {
         "id": "42606444-3fea-45fe-b3be-39f468ddf7db",
-        "position": "1225,1027.40101010101"
+        "position": "2240.37698412698,1432.68842424242"
       },
       {
         "id": "4a286b25-7d82-4e15-be63-c7199a5d8e51",
-        "position": "1127.68253968254,1231.74603174603"
+        "position": "2143.05952380952,1637.03344588744"
       },
       {
         "id": "f573a4e5-0bc0-4299-b8b7-81f05b04aa7e",
-        "position": "1412.5,1239.90101010101"
+        "position": "2427.87698412698,1645.18842424242"
       },
       {
         "id": "3943dc36-208f-42fa-a804-6e3a778e736e",
-        "position": "1237.5,1439.90101010101"
+        "position": "2252.87698412698,1845.18842424242"
       },
       {
         "id": "4eb994f5-c797-44ef-baa4-0da39fcb6850",
-        "position": "1612.5,1427.40101010101"
+        "position": "2627.87698412698,1832.68842424242"
       },
       {
         "id": "5f758f81-c428-4fa5-b3a4-c91d7caf0c49",
-        "position": "1525,1614.90101010101"
+        "position": "2540.37698412698,2020.18842424242"
       },
       {
         "id": "547baa84-e177-473d-a5be-82374f09f0c7",
-        "position": "1837.5,1602.40101010101"
+        "position": "2852.87698412698,2007.68842424242"
       },
       {
         "id": "ce1f955d-e2a3-4597-bacb-8ddfefac7c96",
-        "position": "1650,1114.90101010101"
+        "position": "2665.37698412698,1520.18842424242"
       },
       {
         "id": "52b5706b-f0e1-43eb-819f-0004044e45eb",
-        "position": "1987.5,902.40101010101"
+        "position": "3002.87698412698,1307.68842424242"
       },
       {
         "id": "889dcbfa-00d8-484e-a7c7-247b67fa2a04",
-        "position": "1912.5,1102.40101010101"
+        "position": "2927.87698412698,1507.68842424242"
       },
       {
         "id": "f6a67d41-b36f-4911-b140-fb3efd6b0c46",
-        "position": "2150,1089.90101010101"
+        "position": "3165.37698412698,1495.18842424242"
       },
       {
         "id": "6f3f4817-f9c8-431c-9f5e-74c647fc6e65",
-        "position": "2525,464.90101010101"
+        "position": "3540.37698412698,632.688424242424"
       },
       {
         "id": "ff8dcbea-42bd-421f-b1c7-51827e877b13",
-        "position": "2387.5,589.90101010101"
+        "position": "3402.87698412698,757.688424242424"
       },
       {
         "id": "69199e34-5e0c-4c5c-a70b-a98b7baab854",
-        "position": "2323.5,806.25"
+        "position": "3338.87698412698,974.037414141414"
       },
       {
         "id": "5a33b396-5b32-4078-903b-2b9a28bb6f0f",
-        "position": "2575,802.40101010101"
+        "position": "3590.37698412698,970.188424242424"
       },
       {
         "id": "74b1a3c6-9554-42e9-9fea-938c5e4490ef",
-        "position": "2862.5,577.40101010101"
+        "position": "3877.87698412698,745.188424242424"
       },
       {
         "id": "73b2b4f9-4eb6-4e13-80e4-4625b7c36e58",
-        "position": "2812.5,714.90101010101"
+        "position": "3827.87698412698,882.688424242424"
       },
       {
         "id": "472bda19-fef1-4b3c-812f-e30a8cddb32e",
-        "position": "3050,739.90101010101"
+        "position": "4065.37698412698,907.688424242424"
       },
       {
         "id": "103743d1-43d0-4393-9470-7f798a3b8251",
-        "position": "3737.5,502.40101010101"
+        "position": "4290.37698412698,645.188424242424"
       },
       {
         "id": "9554725a-55a5-428c-bc16-428388deea3d",
-        "position": "3700,652.40101010101"
+        "position": "4252.87698412698,795.188424242424"
       },
       {
         "id": "3b792995-9c68-4904-aa1a-b7013b3485a4",
-        "position": "3912.5,652.40101010101"
+        "position": "4465.37698412698,795.188424242424"
       }
     ],
     "editorObjects": [
@@ -558,8 +718,8 @@
         "boxForeground": "#FF000000"
       }
     ],
-    "canvasSize": "4784.5,2577.40101010101",
-    "gridPadding": "0,2.40101010101009"
+    "canvasSize": "5337.37698412698,2728.18842424242",
+    "gridPadding": "2.87698412698455,9.18842424242368"
   },
   "parameters": [
     {
@@ -576,6 +736,8 @@
     "pathPoints": "return nil",
     "criticalPoints": "return nil",
     "moveCalled": "return false",
-    "TargetPos": "return nil"
+    "TargetPos": "return nil",
+    "visibleEnemies": "return nil",
+    "shootingTarget": "return nil"
   }
 }
