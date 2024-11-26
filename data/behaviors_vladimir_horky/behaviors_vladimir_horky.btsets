@@ -1,8 +1,6 @@
 {
   "btsets": [
-    "",
     "behaviors_vladimir_horky.btset",
-    "P:\\vbs2\\customer\\plugins\\behaviors_minotaur\\data\\behaviors_minotaur\\behaviors_minotaur.btset",
-    "P:\\vbs2\\customer\\plugins\\behaviors_vladimir_horky\\data\\backup\\follow_camel\\RepetitionOne.btset"
+    "P:\\vbs2\\customer\\plugins\\behaviors_minotaur\\data\\behaviors_minotaur\\behaviors_minotaur.btset"
   ]
 }
