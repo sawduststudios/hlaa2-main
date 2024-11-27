@@ -1,10 +1,12 @@
 {
   "name": "behaviors_vladimir_horky",
   "trees": [
+    "DPRKSquad\\SquadRoot.bt",
     "Theseus\\Follow.bt",
     "Theseus\\Listen.bt"
   ],
   "initScripts": [
+    "DPRKSquad\\DPRKSquad.class.lua",
     "Theseus\\Theseus.class.lua",
     "classes.lua"
   ],

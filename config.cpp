@@ -42,5 +42,38 @@ class CfgFunctions
 	{                                                                       \
 		path = __CurrentDir__\data\scripts\fn_vbs_behaviors_vladimir_horky_##functionName##.sqf;  \
 	}
+};
 
+// Defines the new order as available from the Control AI - Military
+class CfgAvailableBehaviors
+{
+	class DPRKSquad_alt_advance
+	{
+		icon = "\vbs2\customer\plugins\behaviors_vladimir_horky\data\behaviors_vladimir_horky.paa";
+		allowRotate = true; // you also get direction
+
+
+		displayname = "Alternating Advance";
+		description = "Alternating Advance";				
+
+		orderName = "AlternatingAdvance"; // it will implicitly have position as well
+		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
+		
+		class RootBehaviors
+		{
+		  group[] = {"standard_behaviors", "GroupRoot"};
+		  entity[] = {"standard_behaviors", "EntityRoot"};
+		  vehicle[] = {"standard_behaviors", "VehicleRoot"};
+		};
+		
+		class Parameters
+		{
+			class debugEnabled
+			{
+				displayName = "debugEnabled";
+				value = "true";
+				type = "boolean";
+			};
+		};
+	};
 };

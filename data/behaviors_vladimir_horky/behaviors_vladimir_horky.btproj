@@ -14,6 +14,12 @@
     <Content Include="classes.lua">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="DPRKSquad\DPRKSquad.class.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="DPRKSquad\SquadRoot.bt">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Theseus\Follow.bt">
       <SubType>Content</SubType>
     </Content>
@@ -25,6 +31,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DPRKSquad" />
     <Folder Include="Theseus" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
