@@ -1,0 +1,232 @@
+{
+  "name": "wait and advance",
+  "id": "2f63bc08-de32-4fdb-bd76-ff5f64026b56",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "someone is alive?",
+      "id": "da94f6e9-1953-46a7-a8a6-d92420ad40c9",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Wait Forever",
+          "id": "a081bed9-7910-4ddf-8f90-9242015b130d",
+          "type": "waitForever",
+          "decorators": [
+            {
+              "id": "1e3c8cd0-ff0f-45d5-af34-081c99c4d0d4",
+              "type": "scriptCondition",
+              "name": "?found leader?",
+              "script": [
+                "-- try to find an alive solider",
+                "loc.foundLeader = nil",
+                "local leaderCandidate = nil",
+                "",
+                "-- iterate over the teams",
+                "local fireTeamCount = self:GetChildGroupCount()",
+                "for i=1,fireTeamCount do    ",
+                "    local iGroup = self:GetChildGroup(i)",
+                "",
+                "    -- try and get group leader",
+                "    leaderCandidate = iGroup:GetLeader()",
+                "    if leaderCandidate:IsAlive() then",
+                "       loc.foundLeaderGroup = iGroup",
+                "       loc.foundLeader = leaderCandidate",
+                "       break ",
+                "    end",
+                "",
+                "    -- if group leader is dead",
+                "    -- iterate over the soliders and try to find an alive one",
+                "    local soliderCount = iGroup:GetChildGroupCount()",
+                "    for s=1,soliderCount do",
+                "        leaderCandidate = iGroup:GetChildGroup(i)",
+                "        if leaderCandidate:IsAlive() then",
+                "            loc.foundLeaderGroup = iGroup",
+                "            loc.foundLeader = leaderCandidate",
+                "            break ",
+                "        end",
+                "    end",
+                "",
+                "    -- noone alive, try again for next fire team    ",
+                "end",
+                "",
+                "if loc.foundLeader == nil then",
+                "    return false",
+                "else",
+                "    return true",
+                "end"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Fail",
+          "id": "91f75bf4-774f-49a8-a256-aa9f16e2bc6c",
+          "type": "fail"
+        }
+      ],
+      "active": true
+    },
+    {
+      "name": "prepare and send order",
+      "id": "763c3c20-8371-4343-a9e7-610978f21c12",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "prepare order data",
+          "id": "11d50994-7e95-4198-ade8-185601053d1c",
+          "type": "scriptAction",
+          "script": [
+            "loc.subOrderData = {orderName = \"Advance\", destination = arg.orderData.destination}",
+            "loc.subordinates = {loc.foundLeaderGroup}",
+            "loc.subordinateData = {}",
+            "-- loc.subordinateData = {destination = arg.orderData.destination}"
+          ]
+        },
+        {
+          "name": "Clear area for all subordinates",
+          "id": "5b947242-2a47-466a-bcb8-46aa3834398c",
+          "type": "reference",
+          "target": [
+            "standard_behaviors",
+            "ExecuteSubordinateOrder"
+          ],
+          "arguments": {
+            "orderData": "return loc.subOrderData",
+            "subordinates": "return loc.subordinates",
+            "subordinateData": "return loc.subordinateData",
+            "update": "return false"
+          }
+        }
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "find a living leader",
+      "id": "d1227ece-b124-4a52-a0e2-cb8e03c6252c",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "d1227ece-b124-4a52-a0e2-cb8e03c6252c",
+            "position": "1350,639.557142857143"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "-- lets iterate over all fire teams",
+        "",
+        "local fireTeamCount = self:GetChildGroupCount()",
+        "",
+        "local leaderCandidate = nil",
+        "",
+        "-- iterate over the teams",
+        "for i=1,fireTeamCount do    ",
+        "    local iGroup = self:GetChildGroup(i)",
+        "",
+        "    -- try and get group leader",
+        "    leaderCandidate = iGroup:GetLeader()",
+        "    if leaderCandidate:IsAlive() then",
+        "       loc.foundLeader = leaderCandidate",
+        "       break ",
+        "    end",
+        "",
+        "    -- if group leader is dead",
+        "    -- iterate over the soliders and try to find an alive one",
+        "    local soliderCount = iGroup:GetChildGroupCount()",
+        "    for s=1,soliderCount do",
+        "        leaderCandidate = iGroup:GetChildGroup(i)",
+        "        if leaderCandidate:IsAlive() then",
+        "            loc.foundLeader = leaderCandidate",
+        "            break ",
+        "        end",
+        "    end",
+        "",
+        "    -- noone alive, try again for next fire team    ",
+        "end"
+      ]
+    },
+    {
+      "name": "Wait Forever",
+      "id": "3b2606b7-766f-4a87-93f6-5fa47a513589",
+      "type": "waitForever",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "3b2606b7-766f-4a87-93f6-5fa47a513589",
+            "position": "1637.5,364.557142857143"
+          }
+        ],
+        "editorObjects": []
+      }
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "2f63bc08-de32-4fdb-bd76-ff5f64026b56",
+        "position": "1925,314.557142857143"
+      },
+      {
+        "id": "da94f6e9-1953-46a7-a8a6-d92420ad40c9",
+        "position": "1662.5,502.057142857143"
+      },
+      {
+        "id": "a081bed9-7910-4ddf-8f90-9242015b130d",
+        "position": "1537.5,627.057142857143"
+      },
+      {
+        "id": "91f75bf4-774f-49a8-a256-aa9f16e2bc6c",
+        "position": "1750,602.057142857143"
+      },
+      {
+        "id": "763c3c20-8371-4343-a9e7-610978f21c12",
+        "position": "2116.21428571429,477.771428571429"
+      },
+      {
+        "id": "11d50994-7e95-4198-ade8-185601053d1c",
+        "position": "1975,652.057142857143"
+      },
+      {
+        "id": "5b947242-2a47-466a-bcb8-46aa3834398c",
+        "position": "2175,639.557142857143"
+      },
+      {
+        "id": "a60a1b56-abc5-44d0-bd32-8a980ce1b107",
+        "position": "2550,589.557142857143"
+      }
+    ],
+    "editorObjects": [
+      {
+        "id": "a60a1b56-abc5-44d0-bd32-8a980ce1b107",
+        "type": "comment",
+        "header": "",
+        "body": "orderData - co za order chci pustit na InfantryTeam; {orderName = \"Advance\"}\r\nsubordinates - reference na fire tymy (asi jen jeden)\r\nsubordinateData - klice jsou subordinate reference, hodnoty jsou tabulky orderData specificka kazdemu fire tymu\r\n{destination = vypoctena pozice, Vec3} \r\nhttps://manuals.bisimulations.com/VBS_Sim_SDK/VBS4-24-2/Content/VBS_Control_Editor/Behaviors_Config_Reference/standard_behaviors_InfantryTeam.htm?Highlight=InfantryTeam#behaviors_Advance\r\nupdate - tam proste dam false",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      }
+    ],
+    "canvasSize": "3840,2803.05714285714",
+    "gridPadding": "0,2.05714285714305"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": "",
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "foundLeader": "return nil",
+    "foundLeaderGroup": "return nil",
+    "subOrderData": "return nil",
+    "subordinates": "return nil",
+    "subordinateData": "return nil"
+  }
+}

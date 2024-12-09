@@ -1,7 +1,7 @@
 {
   "name": "behaviors_vladimir_horky",
   "trees": [
-    "DPRKSquad\\SquadRoot.bt",
+    "DPRKSquad\\SQAlternatingAdvance.bt",
     "Theseus\\Follow.bt",
     "Theseus\\Listen.bt"
   ],

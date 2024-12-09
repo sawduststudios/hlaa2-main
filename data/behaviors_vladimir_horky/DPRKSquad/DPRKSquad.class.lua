@@ -19,13 +19,8 @@ return {
 
         behaviors = {
             AlternatingAdvance = {
-                description = 'Advance',
-                tree = 'SquadRoot',
-                parameters = {},
-            },
-            Idle = {
-                description = 'Idle',
-                tree = 'SquadRoot',
+                description = 'Squad Alternating Advance',
+                tree = 'SQAlternatingAdvance',
                 parameters = {},
             },
         },
