@@ -1,8 +1,5 @@
 {
   "btsets": [
-    "",
-    "behaviors_vladimir_horky.btset",
-    "P:\\vbs2\\customer\\plugins\\_debug\\standard_behaviors\\standard_behaviors.btset",
-    "P:\\vbs2\\customer\\plugins\\behaviors_clear_area\\data\\behaviors_clear_area\\behaviors_clear_area.btset"
+    "behaviors_vladimir_horky.btset"
   ]
 }
